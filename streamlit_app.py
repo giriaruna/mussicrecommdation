@@ -13,7 +13,7 @@ import io
 st.title("Spotify Music Recommendation System 🎶")
 
 # Sidebar for page selection
-app_page = st.sidebar.selectbox('Select Page', ['Overview', 'Visualization', 'Prediction', 'Recommendations', 'Conclusion'])
+app_page = st.sidebar.selectbox('Select Page', ['Overview', 'Visualization', 'Conclusion'])
 
 # Load the Spotify dataset (ensure the correct path to your CSV file)
 df = pd.read_csv("data.csv")
@@ -63,56 +63,6 @@ if app_page == 'Visualization':
         pair = sns.pairplot(df2)
         st.pyplot(pair)
 
-if app_page == 'Prediction':
-    st.title("Prediction")
-    
-    list_columns = df.columns
-    input_lr = st.multiselect("Select features for prediction: ", list_columns, ["danceability", "energy"])
-
-    df_new = df.dropna() 
-    df2 = df_new[input_lr]
-
-    # Target variable
-    y = df_new["Popularity"]
-
-    X_train, X_test, y_train, y_test = train_test_split(df2, y, test_size=0.2, random_state=42)
-    lr = LinearRegression()
-    lr.fit(X_train, y_train)
-
-    pred = lr.predict(X_test)
-
-    explained_variance = np.round(mt.explained_variance_score(y_test, pred) * 100, 2)
-    mae = np.round(mt.mean_absolute_error(y_test, pred), 2)
-    mse = np.round(mt.mean_squared_error(y_test, pred), 2)
-    r_square = np.round(mt.r2_score(y_test, pred), 2)
-
-    # Display results
-    st.subheader('🎯 Prediction Results')
-    st.write("1) The model explains,", explained_variance, "% variance of the target feature (Popularity).")
-    st.write("2) The Mean Absolute Error of the model is:", mae)
-    st.write("3) MSE: ", mse)
-    st.write("4) The R-Square score of the model is", r_square)
-
-    # Plotting the Linear Regression line
-    st.subheader('📈 Linear Regression Line')
-    plt.figure(figsize=(10, 6))
-    sns.regplot(x=df_new[input_lr[0]], y=y, data=df_new, scatter_kws={'alpha':0.5}, line_kws={"color": "red"})
-    plt.title(f'Linear Regression of Popularity vs {input_lr[0]}')
-    plt.xlabel(input_lr[0])
-    plt.ylabel('Popularity')
-    
-    st.pyplot(plt)  # Display the plot in Streamlit
-
-if app_page == 'Recommendations':
-    st.title("Music Recommendations")
-    
-    # Create a simple recommendation system based on user input
-    user_id = st.text_input("Enter your User ID for personalized recommendations:")
-    if user_id:
-        # Simulated recommendation function
-        recommended_songs = get_recommendations(user_id)  # Placeholder function
-        st.subheader('🎶 Recommended Songs:')
-        st.dataframe(recommended_songs)  # Display recommended songs
 
 if app_page == 'Conclusion':
     st.title('Conclusion')
