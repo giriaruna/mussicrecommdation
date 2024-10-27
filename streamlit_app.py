@@ -50,7 +50,8 @@ elif app_page == 'Visualization':
     values = st.multiselect("Select two variables:", list_columns, ["popularity", "danceability"])
 
     # Creation of the line chart
-    st.line_chart(df, x=values[0], y=values[1])
+    if len(values) >= 2:
+        st.line_chart(df.set_index(values[0])[values[1]])
 
     # Create heatmap data
     data1 = df.drop(columns=list(df.select_dtypes(include=['object']).columns))
@@ -64,47 +65,72 @@ elif app_page == 'Visualization':
 
     # Pairplot
     values_pairplot = st.multiselect("Select 4 variables:", list_columns, ["danceability", "energy", "tempo", "popularity"])
-    df2 = df[values_pairplot]
-    pair = sns.pairplot(df2)
-    st.pyplot(pair)
+    if len(values_pairplot) == 4:
+        df2 = df[values_pairplot]
+        pair = sns.pairplot(df2)
+        st.pyplot(pair)
 
 # Page: Collaborative Filtering
 elif app_page == 'Collaborative Filtering':
     st.title("Collaborative Filtering")
-    st.write("This method recommends songs based on what similar users have liked.")
+    st.write("This method recommends songs based on their popularity and features.")
 
-    # Create a user-item matrix for collaborative filtering
-    user_item_matrix = df.pivot_table(index='user_id', columns='song_id', values='play_count').fillna(0)
-
-    # Function for Collaborative Recommendations
-    def get_collaborative_recommendations(user_id, n_recommendations=5):
-        recommended_songs = user_item_matrix.loc[user_id][user_item_matrix.loc[user_id] > 0].index.tolist()
-        return recommended_songs[:n_recommendations]
+    # Function to recommend songs based on similar features
+    def get_collaborative_recommendations(song_id, n_recommendations=5):
+        if song_id in df['id'].values:
+            # Extract the song features
+            song_features = df[df['id'] == song_id].drop(columns=['id', 'name', 'artists', 'release_date', 'year', 'popularity'])
+            # Calculate similarity based on features (using simple Euclidean distance)
+            distances = np.linalg.norm(df.drop(columns=['id', 'name', 'artists', 'release_date', 'year', 'popularity']).values - song_features.values, axis=1)
+            # Get indices of the closest songs
+            recommended_indices = np.argsort(distances)[:n_recommendations]
+            recommended_songs = df.iloc[recommended_indices][['name', 'artists', 'popularity']]
+            return recommended_songs
+        else:
+            return pd.DataFrame(columns=['name', 'artists', 'popularity'])
 
     # User Input for Collaborative Recommendations
-    user_id = st.text_input('Enter User ID (for collaborative recommendations):')
+    song_id = st.text_input('Enter Song ID (for collaborative recommendations):')
     if st.button('Get Collaborative Recommendations'):
-        if user_id:
-            recommendations = get_collaborative_recommendations(user_id)
-            st.write('Recommended Songs:', recommendations)
+        if song_id:
+            recommendations = get_collaborative_recommendations(song_id)
+            if not recommendations.empty:
+                st.write('Recommended Songs:')
+                st.dataframe(recommendations)
+            else:
+                st.write("No recommendations found for this song.")
         else:
-            st.write("Please enter a valid User ID.")
+            st.write("Please enter a valid Song ID.")
 
 # Page: Content-Based Filtering
 elif app_page == 'Content-Based Filtering':
     st.title("Content-Based Filtering")
     st.write("This method recommends songs based on the features of a selected song.")
 
-    # Function for Content-Based Recommendations (placeholder without cosine similarity)
+    # Function for Content-Based Recommendations
     def get_content_based_recommendations(song_id, n_recommendations=5):
-        return [song_id] * n_recommendations  # Dummy implementation for illustration
+        if song_id in df['id'].values:
+            # Extract the song features
+            song_features = df[df['id'] == song_id].drop(columns=['id', 'name', 'artists', 'release_date', 'year', 'popularity'])
+            # Calculate similarity based on features (using simple Euclidean distance)
+            distances = np.linalg.norm(df.drop(columns=['id', 'name', 'artists', 'release_date', 'year', 'popularity']).values - song_features.values, axis=1)
+            # Get indices of the closest songs
+            recommended_indices = np.argsort(distances)[:n_recommendations]
+            recommended_songs = df.iloc[recommended_indices][['name', 'artists', 'popularity']]
+            return recommended_songs
+        else:
+            return pd.DataFrame(columns=['name', 'artists', 'popularity'])
 
     # User Input for Content-Based Recommendations
     song_id = st.text_input('Enter Song ID (for content-based recommendations):')
     if st.button('Get Content-Based Recommendations'):
         if song_id:
             recommendations = get_content_based_recommendations(song_id)
-            st.write('Recommended Songs:', recommendations)
+            if not recommendations.empty:
+                st.write('Recommended Songs:')
+                st.dataframe(recommendations)
+            else:
+                st.write("No recommendations found for this song.")
         else:
             st.write("Please enter a valid Song ID.")
 
@@ -115,9 +141,8 @@ elif app_page == 'Conclusion':
 
     st.subheader('1. Insights:')
     st.markdown('- **Music Features Analysis:** Analyzing audio features revealed significant trends in how these affect popularity and user engagement.')
-    st.markdown('- **Collaborative Filtering Success:** Recommendations based on user behavior can effectively suggest music that users may enjoy.')
+    st.markdown('- **Collaborative Filtering Success:** Recommendations based on song features can effectively suggest similar music to users.')
     st.subheader('2. Future Improvements:')
     st.markdown("- **Enhanced Recommendations:** Incorporating additional features and user feedback mechanisms could improve the accuracy of recommendations.")
     st.subheader('3. Long-term Considerations:')
     st.markdown("- **Dynamic Updates:** Regularly updating the dataset with new songs and user interactions will keep the recommendations relevant.")
-
