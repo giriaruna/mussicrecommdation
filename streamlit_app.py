@@ -17,7 +17,7 @@ st.title("Music Recommendation System 🎶")
 cleaned_df = df.dropna()  # Drop rows with missing values
 
 # Sidebar for navigation
-app_page = st.sidebar.selectbox('Select Page', ['Overview', 'Visualization', 'Collaborative Filtering', 'Content-Based Filtering', 'AI Curation', 'Conclusion'])
+app_page = st.sidebar.selectbox('Select Page', ['Overview', 'Visualization', 'Content-Based Filtering', 'AI Curation', 'Conclusion'])
 df_cleaned = df.dropna()
 
 # Overview Page
@@ -40,9 +40,6 @@ if app_page == 'Overview':
     st.subheader("Let's explore the dataset!")
     st.write("The dataset we will be analyzing contains information about various songs:")
     st.dataframe(df.head())
-
-    st.write("Statistics on the dataset:")
-    st.dataframe(df.describe())
 
     # Descriptive statistics
     st.subheader("Descriptive Statistics")
@@ -74,12 +71,18 @@ elif app_page == 'Visualization':
     feature_columns = ['tempo', 'energy', 'danceability']
     for feature in feature_columns:
         plt.figure(figsize=(10, 5))
+        # Create histogram with KDE for each feature
         sns.histplot(cleaned_df[feature], bins=30, kde=True)
         plt.title(f'Distribution of {feature}')
         plt.xlabel(feature)
         plt.ylabel('Frequency')
         st.pyplot(plt)
+    # Explanation:
+    # This loop iterates over the selected audio features ('tempo', 'energy', 'danceability'),
+    # generating a histogram with a KDE (Kernel Density Estimate) for each feature.
+    # This visualization helps us observe the distribution of these features across songs in the dataset.
 
+    # Top 10 Most Popular Songs
     # Explore user engagement metrics
     st.subheader("User Engagement Metrics")
     st.write("Exploring user engagement metrics such as play counts and likes...")
@@ -90,6 +93,9 @@ elif app_page == 'Visualization':
     plt.xlabel('Popularity')
     plt.ylabel('Song Name')
     st.pyplot(plt)
+
+    st.write("Explanation: \n This bar plot showcases the 10 most popular songs in the dataset by popularity score. By sorting the data and displaying only the top 10, we gain insights into which songs have achieved the highest user engagement, giving clues about popular music trends.")
+
 
 # Content-Based Filtering Page
 elif app_page == 'Content-Based Filtering':
