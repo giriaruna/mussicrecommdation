@@ -17,7 +17,7 @@ st.title("Music Recommendation System 🎶")
 cleaned_df = df.dropna()  # Drop rows with missing values
 
 # Sidebar for navigation
-app_page = st.sidebar.selectbox('Select Page', ['Overview', 'Visualization', 'Collaborative Filtering', 'Content-Based Filtering', 'Conclusion'])
+app_page = st.sidebar.selectbox('Select Page', ['Overview', 'Visualization', 'Collaborative Filtering', 'Content-Based Filtering', 'AI Curation', 'Conclusion'])
 df_cleaned = df.dropna()
 
 # Overview Page
@@ -116,6 +116,41 @@ elif app_page == 'Content-Based Filtering':
             recommendations = recommendations[recommendations['name'] != song_to_filter]  # Exclude the selected song
             st.write("Recommended songs based on features similar to **{}**:".format(song_to_filter))
             st.dataframe(recommendations[['name', 'energy', 'danceability']].head(10))  # Display top 10 recommendations
+
+# AI Curation Page
+elif app_page == 'AI Curation':
+    st.header("AI Curation and User-Created Playlists")
+    
+    # Step 1: User selects songs to create a playlist
+    st.subheader("Create Your Playlist")
+    user_playlist = st.multiselect("Select songs for your playlist:", cleaned_df['name'])
+    
+    if user_playlist:
+        # Step 2: Calculate average features of the selected playlist
+        selected_songs = cleaned_df[cleaned_df['name'].isin(user_playlist)]
+        
+        if not selected_songs.empty:
+            avg_energy = selected_songs['energy'].mean()
+            avg_danceability = selected_songs['danceability'].mean()
+            
+            st.write("Your Playlist Features:")
+            st.write(f"Average Energy: {avg_energy:.2f}")
+            st.write(f"Average Danceability: {avg_danceability:.2f}")
+            
+            # Step 3: Recommend songs that match the vibe of the playlist
+            recommendations = cleaned_df[
+                (cleaned_df['energy'] >= avg_energy - 0.1) & (cleaned_df['energy'] <= avg_energy + 0.1) &
+                (cleaned_df['danceability'] >= avg_danceability - 0.1) & (cleaned_df['danceability'] <= avg_danceability + 0.1)
+            ]
+
+            # Exclude songs already in the user's playlist
+            recommendations = recommendations[~recommendations['name'].isin(user_playlist)]
+            
+            st.write("AI Recommendations Based on Your Playlist:")
+            st.dataframe(recommendations[['name', 'energy', 'danceability']].head(10))  # Display top 10 recommendations
+            
+        else:
+            st.write("No songs found in the playlist.")
 
 # Conclusion Page
 elif app_page == 'Conclusion':
