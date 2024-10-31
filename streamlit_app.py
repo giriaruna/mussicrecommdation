@@ -100,61 +100,15 @@ elif app_page == 'Visualization':
     # generating a histogram with a KDE (Kernel Density Estimate) for each feature.
     # This visualization helps us observe the distribution of these features across songs in the dataset.
 
-    # Top 10 Most Popular Songs
-    # Explore user engagement metrics
-    st.subheader("User Engagement Metrics")
-    st.write("Exploring user engagement metrics such as play counts and likes...")
-    # Example plot for user engagement
-    plt.figure(figsize=(10, 5))
-    sns.barplot(x='popularity', y='name', data=df_cleaned.sort_values('popularity', ascending=False).head(10))
-    plt.title('Top 10 Most Popular Songs')
-    plt.xlabel('Popularity')
-    plt.ylabel('Song Name')
+
+    # Correlation Heatmap of Audio Features
+    st.subheader("Correlation Heatmap of Audio Features")
+    numeric_df = df_cleaned.select_dtypes(include=['float64', 'int64'])
+    correlation = numeric_df.corr()
+    plt.figure(figsize=(12, 8))
+    sns.heatmap(correlation, annot=True, fmt=".2f", cmap="coolwarm")
+    plt.title("Correlation Heatmap of Audio Features")
     st.pyplot(plt)
-
-    st.write("Explanation: \n This bar plot showcases the 10 most popular songs in the dataset by popularity score. By sorting the data and displaying only the top 10, we gain insights into which songs have achieved the highest user engagement, giving clues about popular music trends.")
-    
-    avg_energy_by_genre = data_by_genres.groupby('genres')['energy'].mean().reset_index()
-    top_avg_energy_by_genre = avg_energy_by_genre.sort_values(by='energy', ascending=False).head(10)
-    # Bar plot for average energy by genre
-    plt.figure(figsize=(10, 6))
-    sns.barplot(data=top_avg_energy_by_genre, x='energy', y='genres', palette='viridis')
-    plt.title("Average Energy of Top 10 Genres")
-    plt.xlabel("Average Energy")
-    plt.ylabel("Genre")
-
-    # Rotate y-axis labels for better readability
-    plt.yticks(rotation=45)
-    st.pyplot(plt)
-
-    # Explanation
-    st.write("""
-    **Explanation:** 
-    This bar plot showcases the average energy levels of the top 10 genres based on their mean energy. By limiting the number of genres displayed, we can better observe and understand the variations in energy across different music genres.
-    """)
-
-    # Box plot for energy distribution by genre
-    st.subheader("Energy Distribution Across Genres")
-
-    plt.figure(figsize=(12, 6))
-    sns.boxplot(data=data_by_genres, x='genres', y='energy', palette='viridis')
-    plt.title("Energy Distribution Across Genres")
-    plt.xlabel("Genre")
-    plt.ylabel("Energy")
-
-    # Rotate x-axis labels for better readability
-    plt.xticks(rotation=45)
-    st.pyplot(plt)
-
-    # Explanation
-    st.write("""
-    **Explanation:** 
-    This box plot illustrates the distribution of energy levels across various genres. Each box represents the interquartile range (IQR) of energy values, which contains the middle 50% of the data. The horizontal line within the box indicates the median energy level for each genre. 
-    - **Whiskers** extend to show the range of the data, excluding outliers, which are plotted as individual points beyond the whiskers.
-    - By examining this plot, we can identify which genres have higher energy levels and the variability within each genre. 
-    - For instance, genres like EDM may show higher energy levels with a wider range, while classical music may cluster around lower energy values.
-    - This visualization helps us understand how energy levels differ not only between genres but also within them, revealing unique trends and listener preferences.
-    """)
 
 
     # Trend Over Years: Count of Songs by Tempo
@@ -211,23 +165,13 @@ elif app_page == 'Visualization':
 
     # Show correlation heatmap
     st.subheader("Correlation Heatmap of Audio Features")
+    numeric_df = df_cleaned.select_dtypes(include=['float64', 'int64'])
+    correlation = numeric_df.corr()
     plt.figure(figsize=(12, 8))
-    correlation = df_cleaned.corr()
     sns.heatmap(correlation, annot=True, fmt=".2f", cmap="coolwarm")
     plt.title("Correlation Heatmap of Audio Features")
-    st.pyplot(plt)
+    plt.show()
 
-    # User Engagement Metrics
-    st.subheader("User Engagement Metrics")
-    st.write("Exploring user engagement metrics such as play counts and likes...")
-
-    # Example plot for user engagement
-    plt.figure(figsize=(10, 5))
-    sns.barplot(x='popularity', y='name', data=df_cleaned.sort_values('popularity', ascending=False).head(10))
-    plt.title('Top 10 Most Popular Songs')
-    plt.xlabel('Popularity')
-    plt.ylabel('Song Name')
-    st.pyplot(plt)
 
 # AI Curation Page
 elif app_page == 'AI Curation':
