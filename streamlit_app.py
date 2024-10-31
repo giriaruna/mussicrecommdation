@@ -107,7 +107,6 @@ elif app_page == 'Visualization':
     correlation = numeric_df.corr()
     plt.figure(figsize=(12, 8))
     sns.heatmap(correlation, annot=True, fmt=".2f", cmap="coolwarm")
-    plt.title("Correlation Heatmap of Audio Features")
     st.pyplot(plt)
 
 
@@ -162,14 +161,6 @@ elif app_page == 'Visualization':
     **Explanation:** 
     This count plot illustrates the number of songs released in each decade. This helps visualize how music production has varied over the years and can indicate trends in music popularity over time.
     """)
-
-    # Show correlation heatmap
-    st.subheader("Correlation Heatmap of Audio Features")
-    numeric_df = df_cleaned.select_dtypes(include=['float64', 'int64'])
-    correlation = numeric_df.corr()
-    plt.figure(figsize=(12, 8))
-    sns.heatmap(correlation, annot=True, fmt=".2f", cmap="coolwarm")
-    plt.show()
 
 
 # AI Curation Page
