@@ -37,9 +37,7 @@ if app_page == 'Overview':
    # Project Introduction
    st.header("Project Introduction")
    st.write("""
-   This app leverages AI to enhance your music discovery experience by analyzing user-created playlists
-   and suggesting 'vibe-matching' songs. Our goal is to help you find new music that aligns with the
-   overall mood of your favorite tracks.
+   Our goal is to leverage advanced AI techniques to enhance music discovery by analyzing user-generated playlists and providing personalized song recommendations. We aim to identify the key characteristics that influence song popularity and user preferences, ultimately creating a dynamic platform that helps users uncover new music that aligns with their tastes. By refining our AI algorithms, we strive to deliver a tailored listening experience that not only meets but anticipates user needs.
    """)
 
 
