@@ -243,9 +243,8 @@ elif app_page == 'Conclusion':
 
    st.write("""
    - **Key Findings**:
-     - **Audio Characteristics**: By employing linear regression, we can predict a song's popularity based on various audio features such as tempo, energy, danceability, and valence.
-     - **User Preferences**: Trends indicate a rising popularity of upbeat music, demonstrating evolving listener tastes.
-     - **Vibe-Matching**: Our recommendation system leverages these insights, using content-based filtering to align AI-generated suggestions with user playlists effectively.
+     - **Audio Feature Analysis**: We identified how different audio features influence song popularity and user engagement.
+     - **Enhanced Recommendation System**: By understanding the impact of these features, we can improve our recommendation system, suggesting songs that are likely to resonate with users' preferences.
    """)
 
    st.write("### Future Work")
