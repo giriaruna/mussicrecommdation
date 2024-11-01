@@ -40,9 +40,6 @@ if app_page == 'Overview':
    Our goal is to leverage advanced AI techniques to enhance music discovery by analyzing user-generated playlists and providing personalized song recommendations. We aim to identify the key characteristics that influence song popularity and user preferences, ultimately creating a dynamic platform that helps users uncover new music that aligns with their tastes. By refining our AI algorithms, we strive to deliver a tailored listening experience that not only meets but anticipates user needs.
    """)
 
-   st.write("Our Mission? Help you find new tunes that fit your musical style and make your listening experience personal and fun.")
-
-
    # Questions we aims to answer
    st.header("Key Questions We'll Explore:")
    st.write("""
