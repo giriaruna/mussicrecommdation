@@ -65,11 +65,6 @@ if app_page == 'Overview':
    st.write(data_by_year.head())  # Display the first few rows of the year dataset
    st.write(data_by_year.describe())  # Display summary statistics
 
-
-   # descriptive Statistics
-   st.subheader("Descriptive Statistics")
-   stats = df_cleaned.describe()
-   st.write(stats)
   
    st.write("Source: [Spotify Dataset](https://www.kaggle.com/datasets/vatsalmavani/spotify-dataset)")
   
