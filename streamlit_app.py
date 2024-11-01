@@ -238,24 +238,23 @@ elif app_page == 'Conclusion':
    image_path = Image.open("fun.jpg") 
    st.image(image_path, width=400) 
    st.write("""
-   Our analysis revealed significant insights into music trends and user preferences. By examining
-   audio features and their relationships with user engagement metrics, we can improve our
-   recommendation system.
+   Our analysis has provided valuable insights into music trends and user preferences, directly addressing our initial goals.
    """)
-
 
    st.write("""
    - **Key Findings**:
-     - Certain genres tend to have higher energy levels, influencing recommendations.
-     - Over the years, there has been a noticeable increase in the popularity of upbeat music.
-     - Content-based filtering methods can effectively enhance user playlist experiences by providing
-     vibe-matching recommendations.
+     - **Audio Characteristics**: By employing linear regression, we can predict a song's popularity based on various audio features such as tempo, energy, danceability, and valence.
+     - **User Preferences**: Trends indicate a rising popularity of upbeat music, demonstrating evolving listener tastes.
+     - **Vibe-Matching**: Our recommendation system leverages these insights, using content-based filtering to align AI-generated suggestions with user playlists effectively.
    """)
-
 
    st.write("### Future Work")
    st.write("""
-   We aim to refine our recommendation model further by integrating collaborative filtering
-   methods and enhancing the AI's ability to understand user preferences through more complex
-   data analysis.
+   Moving forward, we aim to enhance our music recommendation system by:
+   - **Data Visualization**: Implementing visualizations that display insights on music genres and user preferences.
+   - **User Experience**: Designing features that support continuous play and personalized music recommendations based on user input and preferences.
+   - **AI Recommendations**: Further improving the AI's ability to provide highly personalized and accurate song suggestions based on user vibes.
+
+   By pursuing these goals, we can create a more engaging and personalized music experience that not only recommends songs but also helps users discover new favorites based on predicted popularity.
    """)
+
